@@ -27,11 +27,16 @@ router = APIRouter()
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=HardwareModel)
 async def post_hardware(hardware: HardwareModel, db: AsyncSession = Depends(get_session)):
     new_hardware = HardwareModel(
-        Serial_Number=hardware.Serial_Number,
-        Name=hardware.Name,
         Description=hardware.Description,
-        Cost=hardware.Cost,
-        Status=hardware.Status,
+        Manufacturer=hardware.Manufacturer,
+        Voltage=hardware.Voltage,
+        Serial_Number=hardware.Serial_Number,
+        Size=hardware.Size,
+        Measure_Unity=hardware.Measure_Unity,
+        Hardware_Type=hardware.Hardware_Type,
+        Hardware_Material=hardware.Hardware_Material,
+        Max_Lenght_Reserve=hardware.Max_Lenght_Reserve,
+        Status=hardware.Status
     )
 
     db.add(new_hardware)
@@ -53,7 +58,7 @@ async def get_hardware(db: AsyncSession = Depends(get_session)):
 
 # Get Hardware BY ID
 @router.get('/{hardware_id}', response_model=HardwareModel, status_code=status.HTTP_200_OK)
-async def get_requirement(hardware_id: int, db: AsyncSession = Depends(get_session)):
+async def get_hardware(hardware_id: int, db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(HardwareModel).filter(HardwareModel.ID == hardware_id)
         result = await session.execute(query)
@@ -76,11 +81,16 @@ async def put_hardware(hardware_id: int, hardware: HardwareModel, db: AsyncSessi
 
         if hardware_up:
             hardware_up.User_ID = hardware.User_ID,
-            hardware_up.Hardware_ID = hardware.Hardware_ID,
-            hardware_up.Withdrawn_Date = hardware.Withdrawn_Date,
-            hardware_up.Return_Date = hardware.Return_Date,
-            hardware_up.Status = hardware.Status,
-            hardware_up.Observations = hardware.Observations
+            hardware_up.Description = hardware.Description,
+            hardware_up.Manufacturer = hardware.Manufacturer,
+            hardware_up.Voltage = hardware.Voltage,
+            hardware_up.Serial_Number = hardware.Serial_Number,
+            hardware_up.Size = hardware.Size,
+            hardware_up.Measure_Unity = hardware.Measure_Unity,
+            hardware_up.Hardware_Type = hardware.Hardware_Type,
+            hardware_up.Hardware_Material = hardware.Hardware_Material,
+            hardware_up.Max_Lenght_Reserve = hardware.Max_Lenght_Reserve,
+            hardware_up.Status = hardware.Status
 
             await session.commit()
 

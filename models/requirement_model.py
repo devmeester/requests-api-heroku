@@ -12,9 +12,9 @@ class RequirementModel(SQLModel, table=True):
     User_ID: int
     Hardware_ID: int
     Withdrawn_Date: datetime
-    Return_Date: Optional[datetime]
-    Status: Optional[bool] = Field(default=True)
-    Observations: Optional[str]
+    Return_Date: datetime
+    Status: str
+    Observations: str
 
     class Config:
         arbitrary_types_allowed = True
