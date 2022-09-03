@@ -62,14 +62,14 @@ async def get_users(db: AsyncSession = Depends(get_session)):
 
 # Get User BY ID
 @router.get('/{users_id}', response_model=UserModel, status_code=status.HTTP_200_OK)
-async def get_user(users_id: str, db: AsyncSession = Depends(get_session)):
+async def get_user(users_id: int, db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(UserModel).filter(UserModel.ID == users_id)
         result = await session.execute(query)
-        user: UserModel = result.scalar_one_or_none()
+        requirement: UserModel = result.scalar_one_or_none()
 
-        if user:
-            return user
+        if requirement:
+            return requirement
         else:
             raise HTTPException(detail='User not found',
                                 status_code=status.HTTP_404_NOT_FOUND)
@@ -84,7 +84,8 @@ async def put_user(users_id: int, user: UserModel, db: AsyncSession = Depends(ge
         user_up: UserModel = result.scalar_one_or_none()
 
         if user_up:
-            user_up.Cpf = user.Cpf,
+            user_up.User_ID = user.User_ID,
+            user_up.Cpf = user_up.Cpf,
             user_up.FirstName = user.FirstName,
             user_up.MiddleName = user.MiddleName,
             user_up.LastName = user.LastName,
@@ -98,7 +99,7 @@ async def put_user(users_id: int, user: UserModel, db: AsyncSession = Depends(ge
             user_up.AddressComplement = user.AddressComplement,
             user_up.District = user.District,
             user_up.City = user.City,
-            user_up.State = user.State,
+            user_up.State = user.State
 
             await session.commit()
 
@@ -110,7 +111,7 @@ async def put_user(users_id: int, user: UserModel, db: AsyncSession = Depends(ge
 
 # Delete User
 @router.delete('/{users_id}', status_code=status.HTTP_204_NO_CONTENT)
-async def delete_user(users_id: str, db: AsyncSession = Depends(get_session)):
+async def delete_user(users_id: int, db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(UserModel).filter(UserModel.ID == users_id)
         result = await session.execute(query)
