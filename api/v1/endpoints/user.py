@@ -61,10 +61,10 @@ async def get_users(db: AsyncSession = Depends(get_session)):
 
 
 # Get User BY ID
-@router.get('/{cpf}', response_model=UserModel, status_code=status.HTTP_200_OK)
-async def get_user(cpf: str, db: AsyncSession = Depends(get_session)):
+@router.get('/{users_id}', response_model=UserModel, status_code=status.HTTP_200_OK)
+async def get_user(users_id: str, db: AsyncSession = Depends(get_session)):
     async with db as session:
-        query = select(UserModel).filter(UserModel.Cpf == cpf)
+        query = select(UserModel).filter(UserModel.ID == users_id)
         result = await session.execute(query)
         user: UserModel = result.scalar_one_or_none()
 
@@ -76,10 +76,10 @@ async def get_user(cpf: str, db: AsyncSession = Depends(get_session)):
 
 
 # Put User
-@router.put('/{cpf}', status_code=status.HTTP_202_ACCEPTED, response_model=UserModel)
-async def put_user(cpf: str, user: UserModel, db: AsyncSession = Depends(get_session)):
+@router.put('/{users.id}', status_code=status.HTTP_202_ACCEPTED, response_model=UserModel)
+async def put_user(users_id: int, user: UserModel, db: AsyncSession = Depends(get_session)):
     async with db as session:
-        query = select(UserModel).filter(UserModel.Cpf == cpf)
+        query = select(UserModel).filter(UserModel.ID == users_id)
         result = await session.execute(query)
         user_up: UserModel = result.scalar_one_or_none()
 
@@ -109,10 +109,10 @@ async def put_user(cpf: str, user: UserModel, db: AsyncSession = Depends(get_ses
 
 
 # Delete User
-@router.delete('/{cpf}', status_code=status.HTTP_204_NO_CONTENT)
-async def delete_user(cpf: str, db: AsyncSession = Depends(get_session)):
+@router.delete('/{users_id}', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user(users_id: str, db: AsyncSession = Depends(get_session)):
     async with db as session:
-        query = select(UserModel).filter(UserModel.Cpf == cpf)
+        query = select(UserModel).filter(UserModel.ID == users_id)
         result = await session.execute(query)
         user_del: UserModel = result.scalar_one_or_none()
 
