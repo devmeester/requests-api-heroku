@@ -76,7 +76,7 @@ async def get_user(users_id: str, db: AsyncSession = Depends(get_session)):
 
 
 # Put User
-@router.put('/{users.id}', status_code=status.HTTP_202_ACCEPTED, response_model=UserModel)
+@router.put('/{users_id}', status_code=status.HTTP_202_ACCEPTED, response_model=UserModel)
 async def put_user(users_id: int, user: UserModel, db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(UserModel).filter(UserModel.ID == users_id)
